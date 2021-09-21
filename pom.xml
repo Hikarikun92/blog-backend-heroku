@@ -52,7 +52,7 @@
         <!-- Database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
 
         <dependency>
@@ -117,6 +117,26 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+
+                <configuration>
+                    <configurationFile>${project.basedir}/config/jooq.xml</configurationFile>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+
+                <configuration>
+                    <configFiles>
+                        <configFile>${project.basedir}/config/flyway.properties</configFile>
+                    </configFiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
