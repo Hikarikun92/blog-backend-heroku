@@ -4,6 +4,7 @@
 package br.hikarikun92.blogbackendheroku.persistence.jooq
 
 
+import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.Post
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.User
 
 import kotlin.collections.List
@@ -29,6 +30,7 @@ open class DefaultSchema : SchemaImpl("", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
+        Post.POST,
         User.USER
     )
 }
