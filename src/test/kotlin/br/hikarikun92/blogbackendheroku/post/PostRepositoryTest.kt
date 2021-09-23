@@ -1,7 +1,10 @@
 package br.hikarikun92.blogbackendheroku.post
 
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_1
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3
 import org.jooq.DSLContext
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,16 +27,19 @@ internal class PostRepositoryTest {
         val user1Posts: List<Post> = repository.findByUserId(1)
             .collectList()
             .block()!!
-        println(user1Posts)
+        val expected1 = listOf<Post>()
+        assertEquals(expected1, user1Posts)
 
         val user2Posts: List<Post> = repository.findByUserId(2)
             .collectList()
             .block()!!
-        println(user2Posts)
+        val expected2 = listOf(POST_1, POST_2)
+        assertEquals(expected2, user2Posts)
 
         val user3Posts: List<Post> = repository.findByUserId(3)
             .collectList()
             .block()!!
-        println(user3Posts)
+        val expected3 = listOf(POST_3)
+        assertEquals(expected3, user3Posts)
     }
 }

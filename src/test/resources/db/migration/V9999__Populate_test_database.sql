@@ -6,4 +6,4 @@ values (1, 'Administrator'),
 insert into post (id, title, body, user_id)
 values (1, 'Example post no. 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat.', 2),
        (2, 'Another example post', 'Integer malesuada lorem non nunc.', 2),
-       (3, 'Writing example applications in Kotlin', 'Etiam semper sodales arcu, at.', 3);
+       (3, 'Writing example applications in Kotlin', 'Kotlin methods are fun', 3);
