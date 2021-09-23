@@ -3,6 +3,7 @@ package br.hikarikun92.blogbackendheroku.user.rest
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_1
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_2
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_3
+import br.hikarikun92.blogbackendheroku.user.User
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -17,10 +18,12 @@ internal class UserRestControllerTest {
 
     @Test
     fun `find all`() {
+        fun User.toJson() = "{\"id\":$id,\"username\":\"$username\"}"
+
         val expectedBody = "[" +
-                "{\"id\":${USER_1.id},\"username\":\"${USER_1.username}\"}," +
-                "{\"id\":${USER_2.id},\"username\":\"${USER_2.username}\"}," +
-                "{\"id\":${USER_3.id},\"username\":\"${USER_3.username}\"}" +
+                "${USER_1.toJson()}," +
+                "${USER_2.toJson()}," +
+                USER_3.toJson() +
                 "]"
 
         client.get()

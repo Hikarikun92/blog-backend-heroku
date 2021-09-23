@@ -78,13 +78,19 @@ class PostRepository(private val dsl: DSLContext) {
 
                 val firstRecord: Record = it.first()
 
+                val userCache: MutableMap<Int, User> = mutableMapOf()
+
                 val author: User = firstRecord.into(AUTHOR).toUser()
+                userCache[author.id!!] = author
 
                 val comments = mutableSetOf<Comment>()
                 it.forEach {
                     val commentRecord: CommentRecord = it.into(COMMENT)
                     if (commentRecord.postId != null) { //If postId is null, it means there were no comments
-                        val commenter: User = it.into(COMMENTER).toUser()
+                        //Check if the user was already created
+                        val commenterRecord: UserRecord = it.into(COMMENTER)
+                        val commenter = userCache.computeIfAbsent(commenterRecord.id!!) { commenterRecord.toUser() }
+
                         comments.add(Comment(commentRecord.id, commentRecord.title!!, commentRecord.body!!, commenter))
                     }
                 }

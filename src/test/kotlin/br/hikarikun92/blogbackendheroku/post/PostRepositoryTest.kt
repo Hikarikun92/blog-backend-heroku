@@ -1,10 +1,14 @@
 package br.hikarikun92.blogbackendheroku.post
 
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_1
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_1_WITH_COMMENTS
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2_WITH_COMMENTS
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3
+import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3_WITH_COMMENTS
 import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,13 +49,16 @@ internal class PostRepositoryTest {
 
     @Test
     fun `find by ID`() {
-        //TODO
-        val result = repository.findById(2)
-            .block()
-        println(result)
+        val post1: Post? = repository.findById(1).block()
+        assertEquals(POST_1_WITH_COMMENTS, post1)
 
-        val result2 = repository.findById(1)
-            .block()
-        println(result2)
+        val post2: Post? = repository.findById(2).block()
+        assertEquals(POST_2_WITH_COMMENTS, post2)
+
+        val post3: Post? = repository.findById(3).block()
+        assertEquals(POST_3_WITH_COMMENTS, post3)
+
+        val nonExisting: Post? = repository.findById(10).block()
+        assertNull(nonExisting)
     }
 }
