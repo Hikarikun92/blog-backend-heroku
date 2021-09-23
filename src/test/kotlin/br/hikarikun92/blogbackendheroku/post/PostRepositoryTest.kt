@@ -42,4 +42,16 @@ internal class PostRepositoryTest {
         val expected3 = listOf(POST_3)
         assertEquals(expected3, user3Posts)
     }
+
+    @Test
+    fun `find by ID`() {
+        //TODO
+        val result = repository.findById(2)
+            .block()
+        println(result)
+
+        val result2 = repository.findById(1)
+            .block()
+        println(result2)
+    }
 }
