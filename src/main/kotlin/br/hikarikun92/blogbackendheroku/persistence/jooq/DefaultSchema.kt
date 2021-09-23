@@ -4,6 +4,7 @@
 package br.hikarikun92.blogbackendheroku.persistence.jooq
 
 
+import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.Comment
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.Post
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.User
 
@@ -30,6 +31,7 @@ open class DefaultSchema : SchemaImpl("", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
+        Comment.COMMENT,
         Post.POST,
         User.USER
     )
