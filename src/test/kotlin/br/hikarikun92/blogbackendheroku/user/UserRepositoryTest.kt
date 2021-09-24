@@ -30,4 +30,9 @@ internal class UserRepositoryTest {
         val expected = listOf(USER_1, USER_2, USER_3)
         assertEquals(expected, users)
     }
+
+    @Test
+    fun `find credentials by username`() {
+        TODO()
+    }
 }

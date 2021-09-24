@@ -7,6 +7,8 @@ package br.hikarikun92.blogbackendheroku.persistence.jooq
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.Comment
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.Post
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.User
+import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.UserCredentials
+import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.UserRoles
 
 import kotlin.collections.List
 
@@ -33,6 +35,8 @@ open class DefaultSchema : SchemaImpl("", DefaultCatalog.DEFAULT_CATALOG) {
     override fun getTables(): List<Table<*>> = listOf(
         Comment.COMMENT,
         Post.POST,
-        User.USER
+        User.USER,
+        UserCredentials.USER_CREDENTIALS,
+        UserRoles.USER_ROLES
     )
 }
