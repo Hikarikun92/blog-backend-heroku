@@ -6,24 +6,24 @@ import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2_WITH_COMMENTS
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3_WITH_COMMENTS
-import org.jooq.DSLContext
+import br.hikarikun92.blogbackendheroku.post.jpa.PostJpaRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jooq.JooqTest
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
 
-@JooqTest
+@DataR2dbcTest
 internal class PostRepositoryTest {
     @Autowired
-    private lateinit var dsl: DSLContext
+    private lateinit var jpaRepository: PostJpaRepository
 
     private lateinit var repository: PostRepository
 
     @BeforeEach
     fun setup() {
-        repository = PostRepository(dsl)
+        repository = PostRepository(jpaRepository)
     }
 
     @Test

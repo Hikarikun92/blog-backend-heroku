@@ -6,24 +6,24 @@ import br.hikarikun92.blogbackendheroku.factory.UserCredentialsFactory.Companion
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_1
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_2
 import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_3
-import org.jooq.DSLContext
+import br.hikarikun92.blogbackendheroku.user.jpa.UserJpaRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jooq.JooqTest
+import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest
 
-@JooqTest
+@DataR2dbcTest
 internal class UserRepositoryTest {
     @Autowired
-    private lateinit var dsl: DSLContext
+    private lateinit var jpaRepository: UserJpaRepository
 
     private lateinit var repository: UserRepository
 
     @BeforeEach
     fun setup() {
-        repository = UserRepository(dsl)
+        repository = UserRepository(jpaRepository)
     }
 
     @Test
