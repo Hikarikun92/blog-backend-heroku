@@ -10,10 +10,11 @@ import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.records.UserReco
 import br.hikarikun92.blogbackendheroku.user.User
 import org.jooq.DSLContext
 import org.jooq.Record
-import org.jooq.SelectConditionStep
+import org.jooq.SelectSeekStep1
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.LocalDateTime
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.User as UserTable
 
 @Repository
@@ -24,10 +25,11 @@ class PostRepository(private val dsl: DSLContext) {
     }
 
     fun findByUserId(userId: Int): Flux<Post> {
-        val query: SelectConditionStep<Record> = dsl.select()
+        val query: SelectSeekStep1<Record, LocalDateTime?> = dsl.select()
             .from(POST)
             .join(USER).on(POST.USER_ID.eq(USER.ID))
             .where(POST.USER_ID.eq(userId))
+            .orderBy(POST.PUBLISHED_DATE)
 
         //Cache for avoiding creating multiple, identical users
         val userReference = Reference<User>()
@@ -59,15 +61,16 @@ class PostRepository(private val dsl: DSLContext) {
     private fun UserRecord.toUser(): User = User(id, username!!)
 
     private fun PostRecord.toPost(user: User, comments: Set<Comment>? = null) =
-        Post(id, title!!, body!!, user, comments)
+        Post(id, title!!, body!!, publishedDate!!, user, comments)
 
     fun findById(id: Int): Mono<Post> {
-        val query: SelectConditionStep<Record> = dsl.select()
+        val query: SelectSeekStep1<Record, LocalDateTime?> = dsl.select()
             .from(POST)
             .join(AUTHOR).on(AUTHOR.ID.eq(POST.USER_ID))
             .leftJoin(COMMENT).on(COMMENT.POST_ID.eq(POST.ID))
             .leftJoin(COMMENTER).on(COMMENT.USER_ID.eq(COMMENTER.ID))
             .where(POST.ID.eq(id))
+            .orderBy(COMMENT.PUBLISHED_DATE)
 
         return Flux.from(query)
             .collectList()
@@ -91,7 +94,15 @@ class PostRepository(private val dsl: DSLContext) {
                         val commenterRecord: UserRecord = it.into(COMMENTER)
                         val commenter = userCache.computeIfAbsent(commenterRecord.id!!) { commenterRecord.toUser() }
 
-                        comments.add(Comment(commentRecord.id, commentRecord.title!!, commentRecord.body!!, commenter))
+                        comments.add(
+                            Comment(
+                                commentRecord.id,
+                                commentRecord.title!!,
+                                commentRecord.body!!,
+                                commentRecord.publishedDate!!,
+                                commenter
+                            )
+                        )
                     }
                 }
 

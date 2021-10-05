@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 @Service
 class PostRestFacade(private val service: PostService) {
     fun findByUserId(userId: Int): Flux<PostByUserDto> = service.findByUserId(userId)
-        .map { PostByUserDto(it.id!!, it.title, it.body) }
+        .map { PostByUserDto(it.id!!, it.title, it.body, it.publishedDate) }
 
     fun findById(id: Int): Mono<PostByIdDto> = service.findById(id)
         .map {
@@ -27,9 +27,9 @@ class PostRestFacade(private val service: PostService) {
                 val user: User = it.user
                 val userDto: UserReadDto = userCache.computeIfAbsent(user.id!!) { user.toReadDto() }
 
-                CommentReadDto(it.id!!, it.title, it.body, userDto)
+                CommentReadDto(it.id!!, it.title, it.body, it.publishedDate, userDto)
             }
 
-            PostByIdDto(it.id!!, it.title, it.body, author, comments)
+            PostByIdDto(it.id!!, it.title, it.body, it.publishedDate, author, comments)
         }
 }

@@ -7,6 +7,8 @@ package br.hikarikun92.blogbackendheroku.persistence.jooq.tables
 import br.hikarikun92.blogbackendheroku.persistence.jooq.DefaultSchema
 import br.hikarikun92.blogbackendheroku.persistence.jooq.tables.records.CommentRecord
 
+import java.time.LocalDateTime
+
 import kotlin.collections.List
 
 import org.jooq.Field
@@ -14,7 +16,7 @@ import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row5
+import org.jooq.Row6
 import org.jooq.Schema
 import org.jooq.Table
 import org.jooq.TableField
@@ -75,6 +77,11 @@ open class Comment(
     val BODY: TableField<CommentRecord, String?> = createField(DSL.name("body"), SQLDataType.CLOB.nullable(false), this, "")
 
     /**
+     * The column <code>comment.published_date</code>.
+     */
+    val PUBLISHED_DATE: TableField<CommentRecord, LocalDateTime?> = createField(DSL.name("published_date"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "")
+
+    /**
      * The column <code>comment.user_id</code>.
      */
     val USER_ID: TableField<CommentRecord, Int?> = createField(DSL.name("user_id"), SQLDataType.INTEGER.nullable(false), this, "")
@@ -121,7 +128,7 @@ open class Comment(
     override fun rename(name: Name): Comment = Comment(name, null)
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row5<Int?, String?, String?, Int?, Int?> = super.fieldsRow() as Row5<Int?, String?, String?, Int?, Int?>
+    override fun fieldsRow(): Row6<Int?, String?, String?, LocalDateTime?, Int?, Int?> = super.fieldsRow() as Row6<Int?, String?, String?, LocalDateTime?, Int?, Int?>
 }

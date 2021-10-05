@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.format.DateTimeFormatter
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -24,9 +25,13 @@ internal class PostRestControllerTest {
     @Autowired
     private lateinit var client: WebTestClient
 
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
     @Test
     fun `find by User ID`() {
-        fun Post.toJson() = "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\"}"
+        fun Post.toJson() = "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\",\"publishedDate\":\"${
+            dateTimeFormatter.format(publishedDate)
+        }\"}"
 
         val expectedBody1 = "[]"
 
@@ -61,11 +66,15 @@ internal class PostRestControllerTest {
     @Test
     fun `find by ID`() {
         fun User.toJson() = "{\"id\":$id,\"username\":\"$username\"}"
-        fun Comment.toJson() = "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\",\"user\":${user.toJson()}}"
+        fun Comment.toJson() =
+            "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\",\"publishedDate\":\"${
+                dateTimeFormatter.format(publishedDate)
+            }\",\"user\":${user.toJson()}}"
+
         fun Post.toJson() =
-            "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\",\"user\":${user.toJson()},\"comments\":${
-                comments!!.joinToString(separator = ",", prefix = "[", postfix = "]") { it.toJson() }
-            }}"
+            "{\"id\":$id,\"title\":\"$title\",\"body\":\"$body\",\"user\":${user.toJson()},\"publishedDate\":\"${
+                dateTimeFormatter.format(publishedDate)
+            }\",\"comments\":${comments!!.joinToString(separator = ",", prefix = "[", postfix = "]") { it.toJson() }}}"
 
         client.get()
             .uri("/posts/{id}", POST_1_WITH_COMMENTS.id)
