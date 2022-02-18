@@ -21,3 +21,9 @@ data class PostByIdDto(
     val user: UserReadDto,
     val comments: List<CommentReadDto>
 )
+
+//TODO validation
+data class CreatePostDto(
+    val title: String,
+    val body: String
+)

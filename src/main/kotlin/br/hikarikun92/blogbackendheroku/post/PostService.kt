@@ -9,4 +9,6 @@ class PostService(private val repository: PostRepository) {
     fun findByUserId(userId: Int): Flux<Post> = repository.findByUserId(userId)
 
     fun findById(id: Int): Mono<Post> = repository.findById(id)
+
+    fun create(post: Post): Mono<Int> = repository.create(post)
 }

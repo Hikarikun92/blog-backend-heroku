@@ -6,6 +6,7 @@ import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_2_WITH_COMMENTS
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3
 import br.hikarikun92.blogbackendheroku.factory.PostFactory.Companion.POST_3_WITH_COMMENTS
+import br.hikarikun92.blogbackendheroku.factory.UserFactory.Companion.USER_2
 import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest
+import java.time.LocalDateTime
 
 @JooqTest
 internal class PostRepositoryTest {
@@ -60,5 +62,15 @@ internal class PostRepositoryTest {
 
         val nonExisting: Post? = repository.findById(10).block()
         assertNull(nonExisting)
+    }
+
+    @Test
+    fun create() {
+        val post = Post(null, "New post", "Some new post content", LocalDateTime.of(2022, 2, 16, 23, 33, 14), USER_2)
+        val id: Int = repository.create(post).block()!!
+        val expected: Post = post.copy(id = id, comments = setOf())
+
+        val saved: Post = repository.findById(id).block()!!
+        assertEquals(expected, saved)
     }
 }
