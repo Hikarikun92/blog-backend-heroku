@@ -21,11 +21,13 @@ import org.jooq.DSLContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.BodyInserters
@@ -38,6 +40,7 @@ import java.time.format.DateTimeFormatter
 @AutoConfigureWebTestClient
 @Import(FixedClockConfig::class)
 @Transactional
+@AutoConfigureTestDatabase
 internal class PostRestControllerTest {
     @Autowired
     private lateinit var client: WebTestClient
@@ -126,7 +129,8 @@ internal class PostRestControllerTest {
             .expectStatus().isNotFound
     }
 
-    @Test //NOTE: running this test along with the others in this class might cause it to fail, because WebTestClient apparently can't handle transactional tests
+    @DirtiesContext  //Needed because WebTestClient runs outside of the server transaction, which causes it to be committed instead of rolled back
+    @Test
     fun create() {
         val token: String = tokenProvider.generateToken(USER_2.username)
 
