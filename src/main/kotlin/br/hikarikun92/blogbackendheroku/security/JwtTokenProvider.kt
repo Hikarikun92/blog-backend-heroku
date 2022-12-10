@@ -1,17 +1,30 @@
 package br.hikarikun92.blogbackendheroku.security
 
 import io.jsonwebtoken.*
+import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SignatureException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.security.Key
 import java.util.*
 
 @Service
 class JwtTokenProvider(
-    @param:Value("\${app.jwt-secret}") private val jwtSecret: String,
+    @Value("\${app.jwt-secret}") jwtSecret: String,
     @param:Value("\${app.jwt-expiration-ms}") private val jwtExpirationInMs: Long
 ) {
+    private val jwtSecret: Key
+    private val parser: JwtParser
+
+    init {
+        this.jwtSecret = Keys.hmacShaKeyFor(jwtSecret.encodeToByteArray())
+        this.parser = Jwts.parserBuilder()
+            .setSigningKey(this.jwtSecret)
+            .build()
+    }
+
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
     }
@@ -23,7 +36,7 @@ class JwtTokenProvider(
             .setSubject(username)
             .setIssuedAt(now)
             .setExpiration(expiration)
-            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .signWith(jwtSecret, SignatureAlgorithm.HS512)
             .compact()
     }
 
@@ -34,9 +47,7 @@ class JwtTokenProvider(
     }
 
     private fun parseToken(token: String): Jws<Claims> {
-        return Jwts.parser()
-            .setSigningKey(jwtSecret)
-            .parseClaimsJws(token)
+        return parser.parseClaimsJws(token)
     }
 
     fun validateToken(token: String): Boolean {
