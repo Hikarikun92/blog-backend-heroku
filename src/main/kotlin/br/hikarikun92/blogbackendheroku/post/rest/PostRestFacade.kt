@@ -39,6 +39,7 @@ class PostRestFacade(private val service: PostService, private val clock: Clock)
             PostByIdDto(it.id!!, it.title, it.body, it.publishedDate, author, comments)
         }
 
+    //TODO restrict access to ROLE_USER
     fun create(dto: CreatePostDto): Mono<Int> =
         ReactiveSecurityContextHolder.getContext()
             .map { it.authentication.principal as UserDetailsImpl }
