@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0-M1</version>
+        <version>3.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -17,7 +17,8 @@
 
     <properties>
         <java.version>17</java.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>0.11.5</jjwt.version>
+        <r2dbc-mysql.version>0.8.2.RELEASE</r2dbc-mysql.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Security -->
@@ -56,7 +63,12 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
 
@@ -64,12 +76,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jooq</artifactId>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -81,13 +87,14 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>dev.miku</groupId>
             <artifactId>r2dbc-mysql</artifactId>
+            <version>${r2dbc-mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -102,6 +109,13 @@
         </dependency>
 
         <!-- Test -->
+        <!--
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        -->
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
@@ -110,6 +124,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -175,25 +194,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

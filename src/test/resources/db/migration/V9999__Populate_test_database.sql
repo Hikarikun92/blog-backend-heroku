@@ -1,3 +1,7 @@
+-- Necessary for when we use @AutoConfigureTestDatabase, as Spring won't keep "MODE=MySQL" when recreating the test database
+set
+mode MYSQL;
+
 insert into `user` (id, username)
 values (1, 'Administrator'),
        (2, 'John Doe'),

@@ -110,4 +110,14 @@ class PostRepository(private val dsl: DSLContext) {
                 Mono.just(post)
             }
     }
+
+    fun create(post: Post): Mono<Int> {
+        return Mono.fromSupplier {
+            dsl.insertInto(POST, POST.TITLE, POST.BODY, POST.PUBLISHED_DATE, POST.USER_ID)
+                .values(post.title, post.body, post.publishedDate, post.user.id)
+                .returning(POST.ID)
+                .fetchOne()!!
+                .id!!
+        }
+    }
 }

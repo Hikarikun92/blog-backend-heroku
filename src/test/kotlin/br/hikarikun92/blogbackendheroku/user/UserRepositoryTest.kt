@@ -1,6 +1,5 @@
 package br.hikarikun92.blogbackendheroku.user
 
-import br.hikarikun92.blogbackendheroku.config.JooqAutoConfiguration
 import br.hikarikun92.blogbackendheroku.factory.UserCredentialsFactory.Companion.USER_CREDENTIALS_1
 import br.hikarikun92.blogbackendheroku.factory.UserCredentialsFactory.Companion.USER_CREDENTIALS_2
 import br.hikarikun92.blogbackendheroku.factory.UserCredentialsFactory.Companion.USER_CREDENTIALS_3
@@ -12,19 +11,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
-import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
-import org.springframework.boot.test.autoconfigure.jooq.AutoConfigureJooq
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest
-import org.springframework.context.annotation.Import
-import org.springframework.test.context.junit.jupiter.SpringExtension
 
-//@JooqTest
-@ExtendWith(SpringExtension::class)
-@AutoConfigureJooq
-@Import(JooqAutoConfiguration::class, R2dbcAutoConfiguration::class, FlywayAutoConfiguration::class)
+@JooqTest
 internal class UserRepositoryTest {
     @Autowired
     private lateinit var dsl: DSLContext
